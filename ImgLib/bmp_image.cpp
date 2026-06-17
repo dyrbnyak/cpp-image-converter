@@ -145,8 +145,8 @@ Image LoadBMP(const Path& file) {
     BitmapFileHeader fileHeader{};
     BitmapInfoHeader infoHeader{};
     
-    in.read(reinterpret_cast<char*>(&fileHeader), FILE_HEADER_SIZE);
-    in.read(reinterpret_cast<char*>(&infoHeader), INFO_HEADER_SIZE);
+    in.read(reinterpret_cast<char*>(&fileHeader), FILE_HEADER_SIZE); if(!in) return {};
+    in.read(reinterpret_cast<char*>(&infoHeader), INFO_HEADER_SIZE); if(!in) return {};
     
     // Проверяем, что это BMP и формат нам подходит
     if (fileHeader.bfType != SIGNATURE) return {};
@@ -173,8 +173,8 @@ Image LoadBMP(const Path& file) {
     for (int y = 0; y < h; ++y) {
         int fileY = topDown ? y : (h - 1 - y);
         
-        in.read(rowBuffer.data(), stride);
-        if (!in) return {};
+        in.read(rowBuffer.data(), stride); if (!in) return {};
+        
         
         Color* line = result.GetLine(fileY);
         for (int x = 0; x < w; ++x) {
